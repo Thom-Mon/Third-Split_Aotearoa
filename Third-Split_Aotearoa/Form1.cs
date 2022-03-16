@@ -42,8 +42,9 @@ namespace Third_Split_Aotearoa
             {
                 int count = 1;
                 int fragment = 1;
+                string zeroPadding = "00";
                 Mp3Frame mp3Frame = reader.ReadNextFrame();
-                System.IO.FileStream _fs = new System.IO.FileStream(strMP3OutputFolder + "0" + fragment + " " + strMP3OutputFilename, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                System.IO.FileStream _fs = new System.IO.FileStream(strMP3OutputFolder + zeroPadding + fragment + " " + strMP3OutputFilename, System.IO.FileMode.Create, System.IO.FileAccess.Write);
 
                 //double audioLengthInSeconds = (double)mp3Frame.SampleCount / mp3Frame.SampleRate; //how long is a frame -> to use for user to set time instead of frame
                 //Console.WriteLine(audioLengthInSeconds.ToString());
@@ -54,8 +55,10 @@ namespace Third_Split_Aotearoa
                     if (count % frameIndex == 0) //retrieve a sample of frames ToDo: -> base on the frame on the kbit/s to let user define by time instead of frame
                     {
                         fragment++;
+                        if (fragment > 9)   { zeroPadding = "0"; }
+                        if (fragment > 99 ) { zeroPadding = "" ; }
                         _fs.Close();
-                        _fs = new System.IO.FileStream(strMP3OutputFolder + "0" + fragment + " " + strMP3OutputFilename, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                        _fs = new System.IO.FileStream(strMP3OutputFolder + zeroPadding + fragment + " " + strMP3OutputFilename, System.IO.FileMode.Create, System.IO.FileAccess.Write);
                         
                     }
                     _fs.Write(mp3Frame.RawData, 0, mp3Frame.RawData.Length);
