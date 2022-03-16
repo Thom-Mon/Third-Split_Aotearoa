@@ -22,10 +22,12 @@ namespace Third_Split_Aotearoa
         private void Form1_Load(object sender, EventArgs e)
         {
             button_splitMP3.Enabled = false;
+            openFileDialog.Multiselect = true;
         }
 
         private void split_file(string pathToFile) 
         {
+            Cursor.Current = Cursors.WaitCursor;
             string strMP3SourceFilename = pathToFile;              
             string strMP3OutputFilename = getFileName(pathToFile);
 
@@ -88,7 +90,11 @@ namespace Third_Split_Aotearoa
 
             if (result == DialogResult.OK)
             {
-                listBox_folderContents.Items.Add(openFileDialog.FileName);
+                foreach (string file in openFileDialog.FileNames)
+                {
+                    listBox_folderContents.Items.Add(file);
+                }
+                    
                 button_splitMP3.Enabled = true;
             }
         }
@@ -110,10 +116,16 @@ namespace Third_Split_Aotearoa
 
         private void button_splitMP3_Click(object sender, EventArgs e)
         {
-            foreach(string mp3 in listBox_folderContents.Items)
+            Cursor.Current = Cursors.WaitCursor;
+            button_splitMP3.Enabled = false;
+
+            foreach (string mp3 in listBox_folderContents.Items)
             {
                 split_file(mp3);
             }
+
+            Cursor.Current = Cursors.Default;
+            button_splitMP3.Enabled = true;
         }
 
         private string getFileName(string pathToFile)
@@ -135,6 +147,9 @@ namespace Third_Split_Aotearoa
             return Value;
         }
 
-      
+        private void button_emptyList_Click(object sender, EventArgs e)
+        {
+            listBox_folderContents.Items.Clear();
+        }
     }
 }
